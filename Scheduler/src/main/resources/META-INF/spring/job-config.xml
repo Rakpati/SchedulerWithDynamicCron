@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><beans xmlns="http://www.springframework.org/schema/beans" xmlns:batch="http://www.springframework.org/schema/batch" xmlns:context="http://www.springframework.org/schema/context" xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:task="http://www.springframework.org/schema/task" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd       http://www.springframework.org/schema/beans      http://www.springframework.org/schema/beans/spring-beans.xsd     http://www.springframework.org/schema/batch      http://www.springframework.org/schema/batch/spring-batch.xsd     http://www.springframework.org/schema/context      http://www.springframework.org/schema/context/spring-context.xsd         http://www.springframework.org/schema/jdbc   http://www.springframework.org/schema/jdbc/spring-jdbc.xsd  http://www.springframework.org/schema/task  http://www.springframework.org/schema/task/spring-task.xsd">
+	
+	<context:component-scan base-package="com.batchRun.util"/>
+	
+	<job xmlns="http://www.springframework.org/schema/batch" id="myJob" restartable="true">
+		<step allow-start-if-complete="true" id="step1">
+			<tasklet ref="myTasklet">
+			</tasklet>
+		</step>
+	</job>
+	
+	<bean class="com.batchRun.util.MyTasklet" id="myTasklet">
+	   <property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<bean class="com.batchRun.util.MyScheduler" id="myScheduler"/>	
+<!-- 	<task:scheduled-tasks>
+		<task:scheduled ref="myScheduler" method="run" cron="*/5 * * * * *"/>
+	</task:scheduled-tasks>	 -->
+	
+	<task:scheduled-tasks><task:scheduled cron="*/5 * * * * *" method="run" ref="myScheduler"/></task:scheduled-tasks></beans>
